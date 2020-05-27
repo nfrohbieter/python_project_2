@@ -23,47 +23,49 @@ def clean_data():
 
 
 def balance_teams():
-    max_players = len(PLAYERS) / len(TEAMS)
     yes_experience = []
     no_experience = []
+    max_players = len(PLAYERS) / len(TEAMS)
 
     for player in PLAYERS:
-        if player.get("experience") == "YES":
+        if player.get("experience"):
             yes_experience.append(player)
         else:
             no_experience.append(player)
 
+    max_experienced_players = len(yes_experience) / len(TEAMS)
+
     for player in yes_experience:
-        random_number = random.randint(1, 3)
-        if random_number == 1 and len(Panthers) < max_players / 2:
-            Panthers.append(player)
-        elif random_number == 2 and len(Bandits) < max_players / 2:
-            Bandits.append(player)
-        elif random_number == 3 and len(Warriors) < max_players / 2:
-            Warriors.append(player)
-        else:
-            if len(Panthers) < max_players / 2:
+        while True:
+            random_number = random.randint(1, 3)
+            if random_number == 1 and len(Panthers) < max_experienced_players:
                 Panthers.append(player)
-            elif len(Bandits) < max_players / 2:
+                break
+            elif random_number == 2 and len(Bandits) < max_experienced_players:
                 Bandits.append(player)
-            elif len(Warriors) < max_players / 2:
+                break
+            elif random_number == 3 and len(Warriors)
+            < max_experienced_players:
                 Warriors.append(player)
+                break
+            else:
+                continue
 
     for player in no_experience:
-        random_number = random.randint(1, 3)
-        if random_number == 1 and len(Panthers) < max_players:
-            Panthers.append(player)
-        elif random_number == 2 and len(Bandits) < max_players:
-            Bandits.append(player)
-        elif random_number == 3 and len(Warriors) < max_players:
-            Warriors.append(player)
-        else:
-            if len(Panthers) < max_players:
+        while True:
+            random_number = random.randint(1, 3)
+            if random_number == 1 and len(Panthers) < max_players:
                 Panthers.append(player)
-            elif len(Bandits) < max_players:
+                break
+            elif random_number == 2 and len(Bandits) < max_players:
                 Bandits.append(player)
-            elif len(Warriors) < max_players:
+                break
+            elif random_number == 3 and len(Warriors) < max_players:
                 Warriors.append(player)
+                break
+            else:
+                continue
+
     return Panthers, Bandits, Warriors
 
 
@@ -103,7 +105,7 @@ def display_team_stats(team_number):
         print("Invalid input. Please pick a number 1-3.")
 
     for player in team_output:
-        if player.get("experience") == True:
+        if player.get("experience"):
             experienced_players += 1
         else:
             inexperienced_players += 1
@@ -130,6 +132,31 @@ def display_team_stats(team_number):
     print()
 
 
+def keep_going():
+    while True:
+        continue_input = input("\nWould you like to Continue? (yes or no?) \n")
+        if continue_input.lower() == "yes":
+            display_team_options()
+            team_input = int(input("Enter an Option: "))
+            display_team_stats(team_input)
+            continue
+        elif continue_input.lower() == "no":
+            thank_you()
+            break
+        else:
+            invailid_input()
+            print("Type either yes or no.")
+            continue
+
+
+def thank_you():
+    print("Thanks for using BASKETBALL TEAM STATS TOOL")
+
+
+def invailid_input():
+    print("Sorry Invalid Input.", end=" ")
+
+
 if __name__ == '__main__':
     clean_data()
     balance_teams()
@@ -138,16 +165,31 @@ if __name__ == '__main__':
         try:
             user_input = int(input("Enter an Option: "))
         except:
-            print("Invalid Input. Please enter a 1 or a 2.")
+            invailid_input()
+            print("Please enter a 1 or a 2.")
         else:
             if user_input == 1:
                 display_team_options()
-                team_input = int(input("Enter an Option: "))
-                display_team_stats(team_input)
+                while True:
+                    try:
+                        team_input = int(input("Enter an Option: "))
+                    except:
+                        invailid_input()
+                        print("Enter a number 1-3.")
+                    else:
+                        if team_input > 0 and team_input < 4:
+                            display_team_stats(team_input)
+                            keep_going()
+                            break
+                        else:
+                            invailid_input()
+                            print("Enter a number 1-3.")
+                            continue
                 break
             elif user_input == 2:
-                print("Thank you. Please come back again.")
+                thank_you()
                 break
             else:
-                print("Invalid Input. Please enter a 1 or a 2.")
+                invailid_input()
+                print("Please enter a 1 or a 2.")
                 continue
