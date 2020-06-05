@@ -30,7 +30,7 @@ def balance_teams():
     max_players = len(PLAYERS) / len(TEAMS)
 
     for player in players_copy:
-        if player.get("experience") == True:
+        if player.get("experience") is True:
             yes_experience.append(player)
         else:
             no_experience.append(player)
@@ -46,7 +46,8 @@ def balance_teams():
             elif random_number == 2 and len(Bandits) < max_experienced_players:
                 Bandits.append(player)
                 break
-            elif random_number == 3 and len(Warriors) < max_experienced_players:
+            elif random_number == 3 and
+            len(Warriors) < max_experienced_players:
                 Warriors.append(player)
                 break
             else:
@@ -106,7 +107,7 @@ def display_team_stats(team_number):
         print("Invalid input. Please pick a number 1-3.")
 
     for player in team_output:
-        if player.get("experience") == True:
+        if player.get("experience") is True:
             experienced_players += 1
         else:
             inexperienced_players += 1
